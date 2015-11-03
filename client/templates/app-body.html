@@ -56,11 +56,7 @@
     <div class="content-overlay"></div>
 
     <div id="content-container">
-      {{#each thisArray}}
-          {{#with getListInfo}}
-            {{> Template.dynamic template=mainZone}}
-          {{/with}}
-      {{/each}}
+        {{> Template.dynamic template=mainZone}}
     </div>
   </div>
 </template>

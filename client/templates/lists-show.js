@@ -50,7 +50,8 @@ Template.listsShow.helpers({
   },
 
   todos: function(listId) {
-    return Todos.find({listId: listId}, {sort: {createdAt : -1}});
+    var todos = Todos.find({listId: listId}, {sort: {createdAt : -1}});
+    return todos;
   },
 
   debug: function(arg) {
