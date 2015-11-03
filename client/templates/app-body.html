@@ -27,7 +27,7 @@
         <a class="js-new-list link-list-new"><span class="icon-plus"></span>New List</a>
 
         {{#each lists}}
-          <a href="{{pathFor 'listsShow'}}" class="list-todo {{activeListClass}}" title="{{name}}">
+          <a href="{{pathFor 'listsShow' id=_id}}" class="list-todo {{activeListClass}}" title="{{name}}">
             {{#if userId}}
               <span class="icon-lock"></span>
             {{/if}}
@@ -57,7 +57,9 @@
 
     <div id="content-container">
       {{#each thisArray}}
-        {{> yield}}
+          {{#with getListInfo}}
+            {{> Template.dynamic template=mainZone}}
+          {{/with}}
       {{/each}}
     </div>
   </div>

@@ -60,6 +60,10 @@ Template.appBody.helpers({
   thisArray: function() {
     return [this];
   },
+  getListInfo: function() {
+    var data = Lists.findOne({_id: FlowRouter.getParam('id')}, {fields: {_id: 1, name: 1, incompleteCount: 1}});
+    return data;
+  },
   menuOpen: function() {
     return Session.get(MENU_KEY) && 'menu-open';
   },
@@ -77,7 +81,7 @@ Template.appBody.helpers({
     return Lists.find();
   },
   activeListClass: function() {
-    var current = Router.current();
+    var current = FlowRouter.current();
     if (current.route.name === 'listsShow' && current.params._id === this._id) {
       return 'active';
     }
@@ -116,8 +120,14 @@ Template.appBody.events({
 
     // if we are on a private list, we'll need to go to a public one
     var current = Router.current();
-    if (current.route.name === 'listsShow' && current.data().userId) {
-      Router.go('listsShow', Lists.findOne({userId: {$exists: false}}));
+    var currentList = Lists.findOne({_id: FlowRouter.getParams('id')});
+    if (current.route.name === 'listsShow' && currentList.userId) {
+      var aPublicList = Lists.findOne({userId: {$exists: false}});
+      if (aPublicList) {
+        FlowRouter.go('listsShow', aPublicList._id);
+      } else {
+        FlowRouter.go('home');
+      }
     }
   },
 
@@ -125,6 +135,6 @@ Template.appBody.events({
     var list = {name: Lists.defaultName(), incompleteCount: 0};
     list._id = Lists.insert(list);
 
-    Router.go('listsShow', list);
+    FlowRouter.go('listsShow', {id: list._id});
   }
 });

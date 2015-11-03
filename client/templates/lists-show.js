@@ -6,6 +6,14 @@ var firstRender = true;
 var listRenderHold = LaunchScreen.hold();
 listFadeInHold = null;
 
+Template.listsShow.onCreated(function() {
+  var self = this;
+  self.autorun(function() {
+    var listId = FlowRouter.getParam('id');
+    self.subscribe('todos', listId);
+  });
+});
+
 Template.listsShow.onRendered(function() {
   if (firstRender) {
     // Released in app-body.js
@@ -38,11 +46,16 @@ Template.listsShow.helpers({
   },
 
   todosReady: function() {
-    return Router.current().todosHandle.ready();
+    return Template.instance().subscriptionsReady();
   },
 
   todos: function(listId) {
     return Todos.find({listId: listId}, {sort: {createdAt : -1}});
+  },
+
+  debug: function(arg) {
+    console.log('arg', arg);
+    window.debugTodos = arg;
   }
 });
 
@@ -73,7 +86,7 @@ var deleteList = function(list) {
     });
     Lists.remove(list._id);
 
-    Router.go('home');
+    FlowRouter.go('home');
     return true;
   } else {
     return false;

@@ -12,7 +12,10 @@ mobile-experience
 standard-minifiers
 insecure
 less
-iron:router@0.9.4
+kadira:blaze-layout
+kadira:flow-router
+arillo:flow-router-helpers
+reactive-var
 accounts-password
 jquery
 tracker
